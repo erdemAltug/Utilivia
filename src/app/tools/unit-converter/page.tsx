@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+// import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
@@ -129,8 +129,8 @@ function convertTemperature(value: number, from: string, to: string): number {
 }
 
 function UnitConverterContent() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  // const searchParams = useSearchParams()
+  // const router = useRouter()
   
   const [selectedCategory, setSelectedCategory] = useState('length')
   const [fromUnit, setFromUnit] = useState('')

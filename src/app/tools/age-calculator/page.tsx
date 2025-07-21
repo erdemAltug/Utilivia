@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+// import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
@@ -101,8 +101,8 @@ function calculateAge(birthDate: Date): AgeResult {
 }
 
 function AgeCalculatorContent() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  // const searchParams = useSearchParams()
+  // const router = useRouter()
   
   const [birthDate, setBirthDate] = useState('')
   const [birthTime, setBirthTime] = useState('')
