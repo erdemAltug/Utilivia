@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
@@ -100,7 +100,7 @@ function calculateAge(birthDate: Date): AgeResult {
   }
 }
 
-export default function AgeCalculator() {
+function AgeCalculatorContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   
@@ -365,5 +365,50 @@ export default function AgeCalculator() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AgeCalculator() {
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: 'Age Calculator', url: '/tools/age-calculator', isLast: true }
+  ]
+
+  return (
+    <>
+      <JsonLD data={generateCalculatorSchema(
+        'Age Calculator - Calculate Your Exact Age',
+        'https://utilivia.com/tools/age-calculator',
+        'Calculate your exact age in years, months, and days. Find out your zodiac sign, next birthday countdown, and discover fun facts about your life.'
+      )} />
+      
+      <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4 py-8">
+          <Breadcrumbs items={breadcrumbItems} />
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Age Calculator
+              </h1>
+              <p className="text-xl text-gray-600">
+                Calculate your exact age and discover fun facts about your life
+              </p>
+            </div>
+
+            <Suspense fallback={
+              <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading calculator...</p>
+              </div>
+            }>
+              <AgeCalculatorContent />
+            </Suspense>
+          </div>
+        </div>
+      </div>
+    </>
   )
 } 

@@ -7,8 +7,6 @@ import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
 
-export const dynamic = 'force-dynamic'
-
 interface CaseConversion {
   name: string
   key: string

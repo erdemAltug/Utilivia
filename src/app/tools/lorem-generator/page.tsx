@@ -7,8 +7,6 @@ import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
 
-export const dynamic = 'force-dynamic'
-
 const loremWords = [
   'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
   'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore',

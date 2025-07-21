@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     domains: [],
     unoptimized: false,
+  },
+  experimental: {
+    dynamicIO: true,
   }
 }
 

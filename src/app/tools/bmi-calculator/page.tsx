@@ -1,13 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
-
-export const dynamic = 'force-dynamic'
 
 interface BMIResult {
   bmi: number
@@ -73,7 +71,7 @@ function calculateBMI(height: number, weight: number, unit: 'metric' | 'imperial
   return { bmi, category, categoryColor, healthTips }
 }
 
-export default function BMICalculator() {
+function BMICalculatorContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   
@@ -418,6 +416,51 @@ export default function BMICalculator() {
         </div>
       </div>
     </div>
+    </>
+  )
+}
+
+export default function BMICalculator() {
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: 'BMI Calculator', url: '/tools/bmi-calculator', isLast: true }
+  ]
+
+  return (
+    <>
+      <JsonLD data={generateCalculatorSchema(
+        'BMI Calculator - Body Mass Index Calculator',
+        'https://utilivia.com/tools/bmi-calculator',
+        'Calculate your BMI (Body Mass Index) instantly with our free online calculator. Get personalized health insights and recommendations.'
+      )} />
+      
+      <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4 py-8">
+          <Breadcrumbs items={breadcrumbItems} />
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                BMI Calculator
+              </h1>
+              <p className="text-xl text-gray-600">
+                Calculate your Body Mass Index and get personalized health insights
+              </p>
+            </div>
+
+            <Suspense fallback={
+              <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading calculator...</p>
+              </div>
+            }>
+              <BMICalculatorContent />
+            </Suspense>
+          </div>
+        </div>
+      </div>
     </>
   )
 } 

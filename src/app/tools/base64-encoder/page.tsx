@@ -7,8 +7,6 @@ import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
 
-export const dynamic = 'force-dynamic'
-
 function encodeBase64(text: string): string {
   try {
     return btoa(unescape(encodeURIComponent(text)))
