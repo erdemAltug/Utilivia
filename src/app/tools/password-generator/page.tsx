@@ -1,376 +1,314 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-// import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
 
 interface PasswordOptions {
   length: number
-  uppercase: boolean
-  lowercase: boolean
-  numbers: boolean
-  symbols: boolean
+  includeUppercase: boolean
+  includeLowercase: boolean
+  includeNumbers: boolean
+  includeSymbols: boolean
   excludeSimilar: boolean
 }
 
-const defaultOptions: PasswordOptions = {
-  length: 16,
-  uppercase: true,
-  lowercase: true,
-  numbers: true,
-  symbols: true,
-  excludeSimilar: false
-}
+const UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'
+const NUMBERS = '0123456789'
+const SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>?'
+const SIMILAR_CHARS = 'il1Lo0O'
 
 function generatePassword(options: PasswordOptions): string {
-  let charset = ''
+  let characters = ''
   
-  if (options.lowercase) charset += 'abcdefghijklmnopqrstuvwxyz'
-  if (options.uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  if (options.numbers) charset += '0123456789'
-  if (options.symbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?'
+  if (options.includeUppercase) characters += UPPERCASE
+  if (options.includeLowercase) characters += LOWERCASE
+  if (options.includeNumbers) characters += NUMBERS
+  if (options.includeSymbols) characters += SYMBOLS
   
   if (options.excludeSimilar) {
-    // Remove similar looking characters
-    charset = charset.replace(/[il1Lo0O]/g, '')
+    characters = characters.split('').filter(char => !SIMILAR_CHARS.includes(char)).join('')
   }
   
-  if (!charset) return ''
+  if (characters === '') return ''
   
   let password = ''
   for (let i = 0; i < options.length; i++) {
-    password += charset.charAt(Math.floor(Math.random() * charset.length))
+    password += characters.charAt(Math.floor(Math.random() * characters.length))
   }
   
   return password
 }
 
-function getPasswordStrength(password: string): { score: number, label: string, color: string } {
+function getPasswordStrength(password: string): { score: number; label: string; color: string } {
   let score = 0
   
-  if (password.length >= 8) score += 1
-  if (password.length >= 12) score += 1
-  if (password.length >= 16) score += 1
-  if (/[a-z]/.test(password)) score += 1
-  if (/[A-Z]/.test(password)) score += 1
-  if (/[0-9]/.test(password)) score += 1
-  if (/[^A-Za-z0-9]/.test(password)) score += 1
+  if (password.length >= 8) score++
+  if (password.length >= 12) score++
+  if (/[a-z]/.test(password)) score++
+  if (/[A-Z]/.test(password)) score++
+  if (/[0-9]/.test(password)) score++
+  if (/[^A-Za-z0-9]/.test(password)) score++
   
   if (score <= 2) return { score, label: 'Weak', color: 'text-red-600 bg-red-50' }
-  if (score <= 4) return { score, label: 'Fair', color: 'text-orange-600 bg-orange-50' }
-  if (score <= 6) return { score, label: 'Good', color: 'text-yellow-600 bg-yellow-50' }
+  if (score <= 4) return { score, label: 'Medium', color: 'text-yellow-600 bg-yellow-50' }
   return { score, label: 'Strong', color: 'text-green-600 bg-green-50' }
 }
 
 export default function PasswordGenerator() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const [options, setOptions] = useState<PasswordOptions>({
+    length: 12,
+    includeUppercase: true,
+    includeLowercase: true,
+    includeNumbers: true,
+    includeSymbols: true,
+    excludeSimilar: false
+  })
   
-  const [options, setOptions] = useState<PasswordOptions>(defaultOptions)
-  const [password, setPassword] = useState('')
   const [passwords, setPasswords] = useState<string[]>([])
+  const [passwordCount, setPasswordCount] = useState(1)
 
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
-    { name: 'Tools', url: '/#tools' },
     { name: 'Password Generator', url: '/tools/password-generator', isLast: true }
   ]
 
-  // Initialize from URL params
-  useEffect(() => {
-    const lengthParam = searchParams.get('length')
-    const uppercaseParam = searchParams.get('uppercase')
-    const lowercaseParam = searchParams.get('lowercase')
-    const numbersParam = searchParams.get('numbers')
-    const symbolsParam = searchParams.get('symbols')
-
-    if (lengthParam) setOptions(prev => ({ ...prev, length: parseInt(lengthParam) || 16 }))
-    if (uppercaseParam !== null) setOptions(prev => ({ ...prev, uppercase: uppercaseParam === 'true' }))
-    if (lowercaseParam !== null) setOptions(prev => ({ ...prev, lowercase: lowercaseParam === 'true' }))
-    if (numbersParam !== null) setOptions(prev => ({ ...prev, numbers: numbersParam === 'true' }))
-    if (symbolsParam !== null) setOptions(prev => ({ ...prev, symbols: symbolsParam === 'true' }))
-  }, [searchParams])
-
-  const updateURL = (newOptions?: Partial<PasswordOptions>) => {
-    const params = new URLSearchParams()
-    const opts = { ...options, ...newOptions }
-
-    if (opts.length !== 16) params.set('length', opts.length.toString())
-    if (!opts.uppercase) params.set('uppercase', 'false')
-    if (!opts.lowercase) params.set('lowercase', 'false')
-    if (!opts.numbers) params.set('numbers', 'false')
-    if (!opts.symbols) params.set('symbols', 'false')
-
-    const query = params.toString()
-    router.push(`/tools/password-generator${query ? `?${query}` : ''}`, { scroll: false })
-  }
-
   const handleGenerate = () => {
-    const newPassword = generatePassword(options)
-    setPassword(newPassword)
-    updateURL()
-  }
-
-  const generateMultiple = () => {
     const newPasswords = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < passwordCount; i++) {
       newPasswords.push(generatePassword(options))
     }
     setPasswords(newPasswords)
-    updateURL()
   }
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+  const handleCopy = async (password: string) => {
+    await navigator.clipboard.writeText(password)
   }
 
-  const strength = password ? getPasswordStrength(password) : null
+  const handleClear = () => {
+    setPasswords([])
+  }
+
+  const updateOption = (key: keyof PasswordOptions, value: boolean | number) => {
+    setOptions(prev => ({ ...prev, [key]: value }))
+  }
 
   return (
     <>
       <JsonLD data={generateCalculatorSchema(
-        'Free Password Generator - Strong & Secure Password Creator',
+        'Password Generator - Strong & Secure Password Creator',
         'https://utilivia.com/tools/password-generator',
-        'Generate strong, secure passwords instantly. Customizable length, character sets, and security options. Free password generator tool.'
+        'Generate strong, secure passwords instantly. Customizable length, character sets, and security options. Create unique passwords for all your accounts.'
       )} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
-
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl">🛠️</span>
-              <span className="text-xl font-bold text-gray-900">Utilivia</span>
-            </Link>
-            <Link 
-              href="/"
-              className="text-gray-600 hover:text-gray-900 font-medium"
-            >
-              ← Back to Tools
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumbs items={breadcrumbItems} />
-        
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            🔒 Password Generator
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Generate strong, secure passwords for all your accounts. Customize length and character types for maximum security.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Settings */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold mb-6">Password Settings</h2>
-            
-            {/* Length Slider */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Length: {options.length} characters
-              </label>
-              <input
-                type="range"
-                min="4"
-                max="64"
-                value={options.length}
-                onChange={(e) => {
-                  const newLength = parseInt(e.target.value)
-                  setOptions(prev => ({ ...prev, length: newLength }))
-                  updateURL({ length: newLength })
-                }}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>4</span>
-                <span>64</span>
-              </div>
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4 py-8">
+          <Breadcrumbs items={breadcrumbItems} />
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Password Generator
+              </h1>
+              <p className="text-xl text-gray-600">
+                Create strong, secure passwords for your accounts
+              </p>
             </div>
 
-            {/* Character Options */}
-            <div className="space-y-3">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={options.uppercase}
-                  onChange={(e) => {
-                    setOptions(prev => ({ ...prev, uppercase: e.target.checked }))
-                    updateURL({ uppercase: e.target.checked })
-                  }}
-                  className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                />
-                <span className="ml-3 text-sm text-gray-700">Uppercase (A-Z)</span>
-              </label>
-              
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={options.lowercase}
-                  onChange={(e) => {
-                    setOptions(prev => ({ ...prev, lowercase: e.target.checked }))
-                    updateURL({ lowercase: e.target.checked })
-                  }}
-                  className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                />
-                <span className="ml-3 text-sm text-gray-700">Lowercase (a-z)</span>
-              </label>
-              
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={options.numbers}
-                  onChange={(e) => {
-                    setOptions(prev => ({ ...prev, numbers: e.target.checked }))
-                    updateURL({ numbers: e.target.checked })
-                  }}
-                  className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                />
-                <span className="ml-3 text-sm text-gray-700">Numbers (0-9)</span>
-              </label>
-              
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={options.symbols}
-                  onChange={(e) => {
-                    setOptions(prev => ({ ...prev, symbols: e.target.checked }))
-                    updateURL({ symbols: e.target.checked })
-                  }}
-                  className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                />
-                <span className="ml-3 text-sm text-gray-700">Symbols (!@#$%)</span>
-              </label>
-              
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={options.excludeSimilar}
-                  onChange={(e) => {
-                    setOptions(prev => ({ ...prev, excludeSimilar: e.target.checked }))
-                  }}
-                  className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                />
-                <span className="ml-3 text-sm text-gray-700">Exclude similar (il1Lo0O)</span>
-              </label>
-            </div>
-
-            <div className="mt-6 space-y-3">
-              <button
-                onClick={handleGenerate}
-                className="w-full bg-red-600 text-white py-3 px-4 rounded-md hover:bg-red-700 transition-colors font-medium"
-              >
-                Generate Password
-              </button>
-              
-              <button
-                onClick={generateMultiple}
-                className="w-full border border-red-300 text-red-700 py-3 px-4 rounded-md hover:bg-red-50 transition-colors font-medium"
-              >
-                Generate 5 Passwords
-              </button>
-            </div>
-          </div>
-
-          {/* Results */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Single Password */}
-            {password && (
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Generated Password</h2>
-                
-                <div className="bg-gray-50 rounded-lg p-4 border mb-4">
-                  <div className="flex items-center justify-between">
-                    <code className="text-lg font-mono text-gray-900 break-all mr-4">
-                      {password}
-                    </code>
-                    <button
-                      onClick={() => copyToClipboard(password)}
-                      className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm whitespace-nowrap"
-                    >
-                      📋 Copy
-                    </button>
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+              {/* Password Options */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Password Length: {options.length}
+                  </label>
+                  <input
+                    type="range"
+                    min="4"
+                    max="50"
+                    value={options.length}
+                    onChange={(e) => updateOption('length', parseInt(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>4</span>
+                    <span>50</span>
                   </div>
                 </div>
 
-                {strength && (
-                  <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${strength.color}`}>
-                    Password Strength: {strength.label}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Number of Passwords: {passwordCount}
+                  </label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    value={passwordCount}
+                    onChange={(e) => setPasswordCount(parseInt(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>1</span>
+                    <span>10</span>
                   </div>
+                </div>
+              </div>
+
+              {/* Character Options */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={options.includeUppercase}
+                    onChange={(e) => updateOption('includeUppercase', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Uppercase letters (A-Z)
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={options.includeLowercase}
+                    onChange={(e) => updateOption('includeLowercase', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Lowercase letters (a-z)
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={options.includeNumbers}
+                    onChange={(e) => updateOption('includeNumbers', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Numbers (0-9)
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={options.includeSymbols}
+                    onChange={(e) => updateOption('includeSymbols', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Symbols (!@#$%^&*)
+                  </span>
+                </label>
+
+                <label className="flex items-center space-x-3 md:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={options.excludeSimilar}
+                    onChange={(e) => updateOption('excludeSimilar', e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm font-medium text-gray-700">
+                    Exclude similar characters (i, l, 1, L, o, 0, O)
+                  </span>
+                </label>
+              </div>
+
+              {/* Generate Button */}
+              <div className="flex justify-center space-x-4 mb-8">
+                <button
+                  onClick={handleGenerate}
+                  disabled={!options.includeUppercase && !options.includeLowercase && !options.includeNumbers && !options.includeSymbols}
+                  className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Generate Password{passwordCount > 1 ? 's' : ''}
+                </button>
+                {passwords.length > 0 && (
+                  <button
+                    onClick={handleClear}
+                    className="bg-gray-500 text-white px-6 py-3 rounded-md hover:bg-gray-600 transition-colors font-medium"
+                  >
+                    Clear
+                  </button>
                 )}
               </div>
-            )}
 
-            {/* Multiple Passwords */}
-            {passwords.length > 0 && (
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Generated Passwords</h2>
-                
-                <div className="space-y-3">
-                  {passwords.map((pwd, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3 border">
-                      <div className="flex items-center justify-between">
-                        <code className="text-sm font-mono text-gray-900 break-all mr-4">
-                          {pwd}
-                        </code>
-                        <button
-                          onClick={() => copyToClipboard(pwd)}
-                          className="text-red-600 hover:text-red-700 text-sm font-medium whitespace-nowrap"
-                        >
-                          📋 Copy
-                        </button>
+              {/* Generated Passwords */}
+              {passwords.length > 0 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Generated Passwords</h3>
+                  {passwords.map((password, index) => {
+                    const strength = getPasswordStrength(password)
+                    return (
+                      <div key={index} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className={`px-2 py-1 rounded text-xs font-medium ${strength.color}`}>
+                            {strength.label}
+                          </span>
+                          <button
+                            onClick={() => handleCopy(password)}
+                            className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                        <div className="font-mono text-lg break-all bg-white border rounded p-3">
+                          {password}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
+                </div>
+              )}
+
+              {passwords.length === 0 && (
+                <div className="text-center text-gray-500 py-12">
+                  <div className="text-6xl mb-4">🔐</div>
+                  <p className="text-lg">Configure options and generate secure passwords</p>
+                </div>
+              )}
+            </div>
+
+            {/* SEO Content */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Password Security Tips</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Strong Password Characteristics</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>At least 12 characters long</li>
+                    <li>Mix of uppercase and lowercase letters</li>
+                    <li>Include numbers and symbols</li>
+                    <li>Avoid dictionary words</li>
+                    <li>Don't use personal information</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Best Practices</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Use unique passwords for each account</li>
+                    <li>Enable two-factor authentication</li>
+                    <li>Store passwords in a password manager</li>
+                    <li>Update passwords regularly</li>
+                    <li>Never share passwords</li>
+                  </ul>
                 </div>
               </div>
-            )}
-
-            {/* Security Tips */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Password Security Tips</h2>
-              
-              <ul className="space-y-2 text-gray-600">
-                <li>• <strong>Use unique passwords</strong> for each account</li>
-                <li>• <strong>Minimum 12 characters</strong> for better security</li>
-                <li>• <strong>Include all character types</strong> (uppercase, lowercase, numbers, symbols)</li>
-                <li>• <strong>Use a password manager</strong> to store passwords securely</li>
-                <li>• <strong>Enable two-factor authentication</strong> when possible</li>
-                <li>• <strong>Never share passwords</strong> or write them down</li>
-              </ul>
             </div>
-          </div>
-        </div>
-
-        {/* SEO Content */}
-        <div className="mt-12 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Password Generator - Create Strong Passwords</h2>
-          
-          <div className="prose max-w-none text-gray-600">
-            <p className="mb-4">
-              Our password generator creates strong, secure passwords to protect your online accounts. 
-              Customize length and character types to meet specific requirements while maintaining maximum security.
-            </p>
-            
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Why Strong Passwords Matter</h3>
-            <p className="mb-4">
-              Weak passwords are the leading cause of security breaches. Our tool generates cryptographically 
-              strong passwords that are virtually impossible to crack through brute force attacks.
-            </p>
           </div>
         </div>
       </div>
-    </div>
     </>
   )
 } 

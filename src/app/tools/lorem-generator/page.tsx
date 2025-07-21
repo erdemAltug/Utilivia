@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-// import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
@@ -15,30 +14,27 @@ const loremWords = [
   'consequat', 'duis', 'aute', 'irure', 'in', 'reprehenderit', 'voluptate',
   'velit', 'esse', 'cillum', 'fugiat', 'nulla', 'pariatur', 'excepteur', 'sint',
   'occaecat', 'cupidatat', 'non', 'proident', 'sunt', 'culpa', 'qui', 'officia',
-  'deserunt', 'mollit', 'anim', 'id', 'est', 'laborum', 'at', 'vero', 'eos',
-  'accusamus', 'accusantium', 'doloremque', 'laudantium', 'totam', 'rem',
-  'aperiam', 'eaque', 'ipsa', 'quae', 'ab', 'illo', 'inventore', 'veritatis',
-  'et', 'quasi', 'architecto', 'beatae', 'vitae', 'dicta', 'explicabo', 'nemo',
-  'ipsam', 'quia', 'voluptas', 'aspernatur', 'odit', 'aut', 'fugit'
+  'deserunt', 'mollit', 'anim', 'id', 'est', 'laborum'
 ]
 
-function generateLorem(type: 'words' | 'sentences' | 'paragraphs', count: number): string {
-  const getRandomWords = (wordCount: number): string => {
+function generateLorem(type: 'paragraphs' | 'sentences' | 'words', count: number, startWithLorem: boolean): string {
+  if (count <= 0) return ''
+
+  const getRandomWords = (num: number): string[] => {
     const words = []
-    for (let i = 0; i < wordCount; i++) {
+    for (let i = 0; i < num; i++) {
       words.push(loremWords[Math.floor(Math.random() * loremWords.length)])
     }
-    return words.join(' ')
+    return words
   }
 
-  const generateSentence = (): string => {
-    const wordCount = Math.floor(Math.random() * 10) + 8 // 8-17 words per sentence
-    const sentence = getRandomWords(wordCount)
-    return sentence.charAt(0).toUpperCase() + sentence.slice(1) + '.'
+  const generateSentence = (wordCount: number = Math.floor(Math.random() * 10) + 5): string => {
+    const words = getRandomWords(wordCount)
+    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
+    return words.join(' ') + '.'
   }
 
-  const generateParagraph = (): string => {
-    const sentenceCount = Math.floor(Math.random() * 4) + 4 // 4-7 sentences per paragraph
+  const generateParagraph = (sentenceCount: number = Math.floor(Math.random() * 5) + 3): string => {
     const sentences = []
     for (let i = 0; i < sentenceCount; i++) {
       sentences.push(generateSentence())
@@ -46,249 +42,206 @@ function generateLorem(type: 'words' | 'sentences' | 'paragraphs', count: number
     return sentences.join(' ')
   }
 
+  let result = []
+
   switch (type) {
     case 'words':
-      return getRandomWords(count)
+      const words = getRandomWords(count)
+      if (startWithLorem) {
+        words[0] = 'Lorem'
+        words[1] = 'ipsum'
+      }
+      result = [words.join(' ')]
+      break
+
     case 'sentences':
-      const sentences = []
       for (let i = 0; i < count; i++) {
-        sentences.push(generateSentence())
+        result.push(generateSentence())
       }
-      return sentences.join(' ')
+      if (startWithLorem) {
+        result[0] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      }
+      break
+
     case 'paragraphs':
-      const paragraphs = []
       for (let i = 0; i < count; i++) {
-        paragraphs.push(generateParagraph())
+        result.push(generateParagraph())
       }
-      return paragraphs.join('\n\n')
-    default:
-      return ''
+      if (startWithLorem) {
+        result[0] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+      }
+      break
   }
+
+  return result.join('\n\n')
 }
 
 export default function LoremGenerator() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  
-  const [type, setType] = useState<'words' | 'sentences' | 'paragraphs'>('paragraphs')
+  const [type, setType] = useState<'paragraphs' | 'sentences' | 'words'>('paragraphs')
   const [count, setCount] = useState(3)
   const [startWithLorem, setStartWithLorem] = useState(true)
-  const [result, setResult] = useState('')
+  const [generatedText, setGeneratedText] = useState('')
 
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
-    { name: 'Tools', url: '/#tools' },
-    { name: 'Lorem Ipsum Generator', url: '/tools/lorem-generator', isLast: true }
+    { name: 'Lorem Generator', url: '/tools/lorem-generator', isLast: true }
   ]
 
-  // Initialize from URL params
-  useEffect(() => {
-    const typeParam = searchParams.get('type') as 'words' | 'sentences' | 'paragraphs'
-    const countParam = searchParams.get('count')
-    const loremParam = searchParams.get('lorem')
-
-    if (typeParam && ['words', 'sentences', 'paragraphs'].includes(typeParam)) {
-      setType(typeParam)
-    }
-    if (countParam) setCount(parseInt(countParam))
-    if (loremParam !== null) setStartWithLorem(loremParam === 'true')
-  }, [searchParams])
-
-  const updateURL = (newType?: 'words' | 'sentences' | 'paragraphs', newCount?: number, newLorem?: boolean) => {
-    const params = new URLSearchParams()
-    
-    const t = newType ?? type
-    const c = newCount ?? count
-    const l = newLorem ?? startWithLorem
-
-    if (t && t !== 'paragraphs') params.set('type', t)
-    if (c && c !== 3) params.set('count', c.toString())
-    if (!l) params.set('lorem', 'false')
-
-    const query = params.toString()
-    router.push(`/tools/lorem-generator${query ? `?${query}` : ''}`, { scroll: false })
-  }
-
   const handleGenerate = () => {
-    let generated = generateLorem(type, count)
-    
-    if (startWithLorem && type === 'paragraphs') {
-      generated = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ${generated.substring(generated.indexOf(' ') + 1)}`
-    }
-    
-    setResult(generated)
-    updateURL()
+    const text = generateLorem(type, count, startWithLorem)
+    setGeneratedText(text)
   }
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(result)
+  const handleCopy = async () => {
+    if (generatedText) {
+      await navigator.clipboard.writeText(generatedText)
+    }
+  }
+
+  const handleClear = () => {
+    setGeneratedText('')
   }
 
   return (
     <>
       <JsonLD data={generateCalculatorSchema(
-        'Free Lorem Ipsum Generator - Placeholder Text for Web Design',
+        'Lorem Ipsum Generator - Placeholder Text for Web Design',
         'https://utilivia.com/tools/lorem-generator',
-        'Generate Lorem Ipsum placeholder text for web design and development. Create custom paragraphs, sentences, or words instantly.'
+        'Generate Lorem Ipsum placeholder text instantly. Create custom paragraphs, sentences, or words for web design and development.'
       )} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
-
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-orange-100">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl">🛠️</span>
-              <span className="text-xl font-bold text-gray-900">Utilivia</span>
-            </Link>
-            <Link 
-              href="/"
-              className="text-gray-600 hover:text-gray-900 font-medium"
-            >
-              ← Back to Tools
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumbs items={breadcrumbItems} />
-        
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            📄 Lorem Ipsum Generator
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Generate placeholder text for web design and development. Create custom Lorem Ipsum paragraphs, sentences, or words instantly.
-          </p>
-        </div>
-
-        {/* Generator Form */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-6">Generate Lorem Ipsum</h2>
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4 py-8">
+          <Breadcrumbs items={breadcrumbItems} />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            {/* Type Selector */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Generate
-              </label>
-              <select
-                value={type}
-                onChange={(e) => {
-                  const newType = e.target.value as 'words' | 'sentences' | 'paragraphs'
-                  setType(newType)
-                  updateURL(newType)
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-              >
-                <option value="paragraphs">Paragraphs</option>
-                <option value="sentences">Sentences</option>
-                <option value="words">Words</option>
-              </select>
-            </div>
-
-            {/* Count Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                How many?
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="50"
-                value={count}
-                onChange={(e) => {
-                  const newCount = parseInt(e.target.value) || 1
-                  setCount(newCount)
-                  updateURL(undefined, newCount)
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-              />
-            </div>
-
-            {/* Start with Lorem checkbox */}
-            <div className="flex items-center justify-center">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={startWithLorem}
-                  onChange={(e) => {
-                    setStartWithLorem(e.target.checked)
-                    updateURL(undefined, undefined, e.target.checked)
-                  }}
-                  className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
-                />
-                <span className="text-sm text-gray-700">Start with "Lorem ipsum"</span>
-              </label>
-            </div>
-          </div>
-
-          <button
-            onClick={handleGenerate}
-            className="w-full bg-orange-600 text-white py-3 px-4 rounded-md hover:bg-orange-700 transition-colors font-medium"
-          >
-            Generate Lorem Ipsum
-          </button>
-        </div>
-
-        {/* Results */}
-        {result && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Generated Text</h2>
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-500">
-                  {result.split(' ').length} words, {result.length} characters
-                </span>
-                <button
-                  onClick={copyToClipboard}
-                  className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors text-sm"
-                >
-                  📋 Copy
-                </button>
-              </div>
-            </div>
-            
-            <div className="bg-gray-50 rounded-lg p-4 border max-h-64 overflow-y-auto">
-              <p className="text-gray-900 whitespace-pre-wrap leading-relaxed">
-                {result}
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Lorem Ipsum Generator
+              </h1>
+              <p className="text-xl text-gray-600">
+                Generate placeholder text for your web design projects
               </p>
             </div>
-          </div>
-        )}
 
-        {/* SEO Content */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Lorem Ipsum Generator - Placeholder Text Tool</h2>
-          
-          <div className="prose max-w-none text-gray-600">
-            <p className="mb-4">
-              Lorem Ipsum is the industry standard placeholder text used in web design, graphic design, and publishing. 
-              Our generator creates custom Lorem Ipsum text for your projects, mockups, and layouts.
-            </p>
-            
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Why Use Lorem Ipsum?</h3>
-            <ul className="list-disc list-inside space-y-2 mb-4">
-              <li><strong>Focus on Design:</strong> Prevents content from distracting during design</li>
-              <li><strong>Standard Practice:</strong> Industry standard since the 1500s</li>
-              <li><strong>Uniform Length:</strong> Consistent word and letter distribution</li>
-              <li><strong>Professional:</strong> Used by designers and developers worldwide</li>
-            </ul>
-            
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Use Cases</h3>
-            <ul className="list-disc list-inside space-y-2">
-              <li>Website mockups and wireframes</li>
-              <li>Print design layouts</li>
-              <li>App interface development</li>
-              <li>Content management system testing</li>
-            </ul>
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+              {/* Generator Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Type
+                  </label>
+                  <select
+                    value={type}
+                    onChange={(e) => setType(e.target.value as 'paragraphs' | 'sentences' | 'words')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="paragraphs">Paragraphs</option>
+                    <option value="sentences">Sentences</option>
+                    <option value="words">Words</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Count
+                  </label>
+                  <input
+                    type="number"
+                    value={count}
+                    onChange={(e) => setCount(Math.max(1, parseInt(e.target.value) || 1))}
+                    min="1"
+                    max="50"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={startWithLorem}
+                      onChange={(e) => setStartWithLorem(e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      Start with "Lorem ipsum"
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Generate Button */}
+              <div className="flex justify-center mb-8">
+                <button
+                  onClick={handleGenerate}
+                  className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+                >
+                  Generate Lorem Ipsum
+                </button>
+              </div>
+
+              {/* Generated Text Output */}
+              {generatedText && (
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Generated Text
+                    </label>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={handleCopy}
+                        className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                      >
+                        Copy
+                      </button>
+                      <button
+                        onClick={handleClear}
+                        className="text-sm bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 border border-gray-300 rounded-md p-4 max-h-96 overflow-y-auto">
+                    <pre className="whitespace-pre-wrap text-sm text-gray-900 font-sans leading-relaxed">
+                      {generatedText}
+                    </pre>
+                  </div>
+                </div>
+              )}
+
+              {!generatedText && (
+                <div className="text-center text-gray-500 py-12">
+                  <div className="text-6xl mb-4">📄</div>
+                  <p className="text-lg">Click generate to create Lorem Ipsum text</p>
+                </div>
+              )}
+            </div>
+
+            {/* SEO Content */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">About Lorem Ipsum</h2>
+              
+              <p className="text-gray-600 mb-4">
+                Lorem Ipsum is placeholder text commonly used in the printing and typesetting industry. 
+                It has been the industry standard dummy text since the 1500s, when an unknown printer 
+                took a galley of type and scrambled it to make a type specimen book.
+              </p>
+              
+              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Why Use Lorem Ipsum?</h3>
+              <ul className="list-disc list-inside space-y-2 text-gray-600">
+                <li><strong>Focus on Design:</strong> Prevents distraction from content when focusing on layout</li>
+                <li><strong>Standard Length:</strong> Provides predictable text length for testing layouts</li>
+                <li><strong>Language Neutral:</strong> Doesn't favor any particular language</li>
+                <li><strong>Professional:</strong> Industry standard for placeholder text</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   )
 } 

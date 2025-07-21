@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-// import { useSearchParams, useRouter } from 'next/navigation'
 import JsonLD from '@/components/JsonLD'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { generateCalculatorSchema, generateBreadcrumbSchema } from '@/lib/seo'
@@ -19,289 +18,226 @@ function decodeBase64(base64: string): string {
   try {
     return decodeURIComponent(escape(atob(base64)))
   } catch (error) {
-    return 'Error: Invalid Base64 string'
+    return 'Error: Invalid Base64 input'
   }
 }
 
 export default function Base64Encoder() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  
   const [mode, setMode] = useState<'encode' | 'decode'>('encode')
-  const [inputText, setInputText] = useState('')
-  const [result, setResult] = useState('')
+  const [input, setInput] = useState('')
+  const [output, setOutput] = useState('')
 
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
-    { name: 'Tools', url: '/#tools' },
-    { name: 'Base64 Encode/Decode', url: '/tools/base64-encoder', isLast: true }
+    { name: 'Base64 Encoder', url: '/tools/base64-encoder', isLast: true }
   ]
 
-  // Initialize from URL params
-  useEffect(() => {
-    const modeParam = searchParams.get('mode') as 'encode' | 'decode'
-    const textParam = searchParams.get('text')
-
-    if (modeParam && ['encode', 'decode'].includes(modeParam)) {
-      setMode(modeParam)
-    }
-    if (textParam) {
-      setInputText(decodeURIComponent(textParam))
-    }
-  }, [searchParams])
-
-  const updateURL = (newMode?: 'encode' | 'decode', newText?: string) => {
-    const params = new URLSearchParams()
-    
-    const m = newMode ?? mode
-    const t = newText ?? inputText
-
-    if (m !== 'encode') params.set('mode', m)
-    if (t) params.set('text', encodeURIComponent(t))
-
-    const query = params.toString()
-    router.push(`/tools/base64-encoder${query ? `?${query}` : ''}`, { scroll: false })
-  }
-
   const handleConvert = () => {
-    if (!inputText.trim()) {
-      setResult('')
+    if (!input.trim()) {
+      setOutput('')
       return
     }
 
-    const converted = mode === 'encode' 
-      ? encodeBase64(inputText)
-      : decodeBase64(inputText)
-    
-    setResult(converted)
-    updateURL()
-  }
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-  }
-
-  const handleInputChange = (value: string) => {
-    setInputText(value)
-    updateURL(undefined, value)
-    
-    // Auto-convert as user types
-    if (value.trim()) {
-      const converted = mode === 'encode' 
-        ? encodeBase64(value)
-        : decodeBase64(value)
-      setResult(converted)
+    if (mode === 'encode') {
+      setOutput(encodeBase64(input))
     } else {
-      setResult('')
+      setOutput(decodeBase64(input))
     }
   }
+
+  const handleCopy = async () => {
+    if (output) {
+      await navigator.clipboard.writeText(output)
+    }
+  }
+
+  const handleClear = () => {
+    setInput('')
+    setOutput('')
+  }
+
+  const handleSwap = () => {
+    setInput(output)
+    setOutput('')
+    setMode(mode === 'encode' ? 'decode' : 'encode')
+  }
+
+  // Auto convert on input change
+  React.useEffect(() => {
+    if (input.trim()) {
+      handleConvert()
+    } else {
+      setOutput('')
+    }
+  }, [input, mode])
 
   return (
     <>
       <JsonLD data={generateCalculatorSchema(
-        'Free Base64 Encoder/Decoder - Online Base64 Converter',
+        'Base64 Encoder/Decoder - Online Base64 Converter',
         'https://utilivia.com/tools/base64-encoder',
-        'Encode and decode Base64 strings instantly. Free online Base64 converter for developers and web professionals.'
+        'Encode and decode Base64 strings instantly. Free online Base64 converter for developers, API testing, and data transmission.'
       )} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
-
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-cyan-100">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl">🛠️</span>
-              <span className="text-xl font-bold text-gray-900">Utilivia</span>
-            </Link>
-            <Link 
-              href="/"
-              className="text-gray-600 hover:text-gray-900 font-medium"
-            >
-              ← Back to Tools
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumbs items={breadcrumbItems} />
-        
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            🔐 Base64 Encoder/Decoder
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Encode and decode Base64 strings instantly. Perfect for developers, API testing, and data transmission.
-          </p>
-        </div>
-
-        {/* Mode Toggle */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg p-1 shadow-lg">
-            <button
-              onClick={() => {
-                setMode('encode')
-                setResult('')
-                updateURL('encode')
-              }}
-              className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                mode === 'encode'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Encode
-            </button>
-            <button
-              onClick={() => {
-                setMode('decode')
-                setResult('')
-                updateURL('decode')
-              }}
-              className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                mode === 'decode'
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Decode
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Input */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">
-              {mode === 'encode' ? 'Text to Encode' : 'Base64 to Decode'}
-            </h2>
-            
-            <textarea
-              value={inputText}
-              onChange={(e) => handleInputChange(e.target.value)}
-              placeholder={
-                mode === 'encode' 
-                  ? 'Enter text to encode...' 
-                  : 'Enter Base64 string to decode...'
-              }
-              className="w-full h-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none font-mono text-sm"
-            />
-            
-            <div className="flex justify-between items-center mt-4">
-              <span className="text-sm text-gray-500">
-                {inputText.length} characters
-              </span>
-              <button
-                onClick={handleConvert}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
-              >
-                {mode === 'encode' ? 'Encode' : 'Decode'}
-              </button>
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4 py-8">
+          <Breadcrumbs items={breadcrumbItems} />
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Base64 Encoder/Decoder
+              </h1>
+              <p className="text-xl text-gray-600">
+                Encode and decode Base64 strings instantly
+              </p>
             </div>
-          </div>
 
-          {/* Output */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">
-                {mode === 'encode' ? 'Base64 Encoded' : 'Decoded Text'}
-              </h2>
-              {result && (
-                <button
-                  onClick={() => copyToClipboard(result)}
-                  className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
-                >
-                  📋 Copy
-                </button>
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+              {/* Mode Toggle */}
+              <div className="flex justify-center mb-6">
+                <div className="flex bg-gray-100 rounded-lg p-1">
+                  <button
+                    onClick={() => setMode('encode')}
+                    className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                      mode === 'encode'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Encode
+                  </button>
+                  <button
+                    onClick={() => setMode('decode')}
+                    className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                      mode === 'decode'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Decode
+                  </button>
+                </div>
+              </div>
+
+              {/* Input Section */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {mode === 'encode' ? 'Text to Encode' : 'Base64 to Decode'}
+                </label>
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={
+                    mode === 'encode'
+                      ? 'Enter text to encode to Base64...'
+                      : 'Enter Base64 string to decode...'
+                  }
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono"
+                />
+              </div>
+
+              {/* Output Section */}
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    {mode === 'encode' ? 'Base64 Encoded' : 'Decoded Text'}
+                  </label>
+                  <div className="flex space-x-2">
+                    {output && (
+                      <>
+                        <button
+                          onClick={handleCopy}
+                          className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                        >
+                          Copy
+                        </button>
+                        <button
+                          onClick={handleSwap}
+                          className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
+                        >
+                          Swap
+                        </button>
+                      </>
+                    )}
+                    <button
+                      onClick={handleClear}
+                      className="text-sm bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <textarea
+                  value={output}
+                  readOnly
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 resize-none font-mono text-sm"
+                  placeholder={
+                    mode === 'encode'
+                      ? 'Base64 encoded result will appear here...'
+                      : 'Decoded text will appear here...'
+                  }
+                />
+              </div>
+
+              {!input && (
+                <div className="text-center text-gray-500 py-12">
+                  <div className="text-6xl mb-4">🔤</div>
+                  <p className="text-lg">
+                    Enter text above to {mode === 'encode' ? 'encode' : 'decode'}
+                  </p>
+                </div>
               )}
             </div>
-            
-            <div className="bg-gray-50 rounded-lg p-4 border min-h-48 max-h-48 overflow-y-auto">
-              <code className="text-sm text-gray-900 whitespace-pre-wrap break-all">
-                {result || 'Result will appear here...'}
-              </code>
-            </div>
-            
-            {result && (
-              <div className="mt-4 text-sm text-gray-500">
-                {result.length} characters
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Examples */}
-        <div className="mt-12 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Examples</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Encoding Example</h3>
-              <div className="space-y-2">
+            {/* SEO Content */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">About Base64 Encoding</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <span className="text-sm text-gray-600">Original Text:</span>
-                  <div className="bg-gray-50 rounded p-2 font-mono text-sm">
-                    Hello, World!
-                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">What is Base64?</h3>
+                  <p className="text-gray-600 mb-4">
+                    Base64 is a binary-to-text encoding scheme that represents binary data in ASCII format. 
+                    It's commonly used to encode binary data for transmission over text-based protocols 
+                    like HTTP and email.
+                  </p>
+                  
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Common Use Cases</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Embedding images in HTML/CSS</li>
+                    <li>API authentication tokens</li>
+                    <li>Email attachments</li>
+                    <li>Data URLs</li>
+                  </ul>
                 </div>
-                <div>
-                  <span className="text-sm text-gray-600">Base64 Encoded:</span>
-                  <div className="bg-gray-50 rounded p-2 font-mono text-sm break-all">
-                    SGVsbG8sIFdvcmxkIQ==
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Decoding Example</h3>
-              <div className="space-y-2">
-                <div>
-                  <span className="text-sm text-gray-600">Base64 String:</span>
-                  <div className="bg-gray-50 rounded p-2 font-mono text-sm break-all">
-                    VXRpbGl2aWE=
-                  </div>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600">Decoded Text:</span>
-                  <div className="bg-gray-50 rounded p-2 font-mono text-sm">
-                    Utilivia
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* SEO Content */}
-        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Base64 Encoder/Decoder - Online Converter</h2>
-          
-          <div className="prose max-w-none text-gray-600">
-            <p className="mb-4">
-              Base64 is a encoding scheme used to represent binary data in ASCII string format. 
-              Our online Base64 encoder/decoder makes it easy to convert between text and Base64 encoding.
-            </p>
-            
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Common Use Cases</h3>
-            <ul className="list-disc list-inside space-y-2 mb-4">
-              <li><strong>Email Attachments:</strong> Encoding binary files for email transmission</li>
-              <li><strong>Web Development:</strong> Embedding images and files in HTML/CSS</li>
-              <li><strong>API Integration:</strong> Transmitting binary data over HTTP</li>
-              <li><strong>Data Storage:</strong> Storing binary data in text-based formats like JSON or XML</li>
-            </ul>
-            
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">How Base64 Works</h3>
-            <p className="mb-4">
-              Base64 encoding converts binary data into a text string using 64 ASCII characters: 
-              A-Z, a-z, 0-9, +, and /. The = character is used for padding when needed.
-            </p>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Features</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>Instant real-time conversion</li>
+                    <li>Encode and decode in one tool</li>
+                    <li>Copy results with one click</li>
+                    <li>Swap input/output easily</li>
+                    <li>No file upload required</li>
+                  </ul>
+
+                  <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Safety & Privacy</h3>
+                  <ul className="list-disc list-inside space-y-2 text-gray-600">
+                    <li>All processing happens in your browser</li>
+                    <li>No data is sent to servers</li>
+                    <li>Completely private and secure</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   )
 } 
