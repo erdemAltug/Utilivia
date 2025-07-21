@@ -1,0 +1,38 @@
+{
+  "name": "utilivia",
+  "version": "1.0.0",
+  "description": "Free online utility tools for everyday tasks - BMI calculator, unit converter, password generator and more",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "utility tools",
+    "calculator",
+    "converter",
+    "SEO",
+    "free tools"
+  ],
+  "author": "Utilivia",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "critters": "^0.0.23",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}
