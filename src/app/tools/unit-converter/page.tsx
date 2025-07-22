@@ -279,50 +279,145 @@ export default function UnitConverter() {
               )}
             </div>
 
-            {/* SEO Content */}
-            <div className="bg-white rounded-xl shadow-lg p-8">
+            {/* Popular Conversions - SEO Link Building */}
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Popular Unit Conversions</h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Length Conversions */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Length Conversions</h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>• <strong>CM to Meter:</strong> Divide by 100</li>
-                    <li>• <strong>Inch to CM:</strong> Multiply by 2.54</li>
-                    <li>• <strong>Feet to Meter:</strong> Multiply by 0.3048</li>
-                    <li>• <strong>KM to Miles:</strong> Multiply by 0.621371</li>
-                  </ul>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Length</h3>
+                  <div className="space-y-2">
+                    <Link href="/tools/unit-converter/cm/to/meter" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      CM to Meter →
+                    </Link>
+                    <Link href="/tools/unit-converter/inch/to/cm" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Inch to CM →
+                    </Link>
+                    <Link href="/tools/unit-converter/ft/to/meter" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Feet to Meter →
+                    </Link>
+                    <Link href="/tools/unit-converter/km/to/mile" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      KM to Miles →
+                    </Link>
+                    <Link href="/tools/unit-converter/meter/to/cm" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Meter to CM →
+                    </Link>
+                    <Link href="/tools/unit-converter/mile/to/km" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Miles to KM →
+                    </Link>
+                  </div>
                 </div>
 
+                {/* Weight Conversions */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Weight Conversions</h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>• <strong>KG to Pounds:</strong> Multiply by 2.20462</li>
-                    <li>• <strong>Pounds to KG:</strong> Divide by 2.20462</li>
-                    <li>• <strong>Grams to Ounces:</strong> Multiply by 0.035274</li>
-                    <li>• <strong>Ounces to Grams:</strong> Multiply by 28.3495</li>
-                  </ul>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Weight</h3>
+                  <div className="space-y-2">
+                    <Link href="/tools/unit-converter/kg/to/lb" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      KG to Pounds →
+                    </Link>
+                    <Link href="/tools/unit-converter/lb/to/kg" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Pounds to KG →
+                    </Link>
+                    <Link href="/tools/unit-converter/gram/to/oz" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Grams to Ounces →
+                    </Link>
+                    <Link href="/tools/unit-converter/oz/to/gram" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Ounces to Grams →
+                    </Link>
+                    <Link href="/tools/unit-converter/kg/to/gram" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      KG to Grams →
+                    </Link>
+                    <Link href="/tools/unit-converter/ton/to/kg" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Ton to KG →
+                    </Link>
+                  </div>
                 </div>
 
+                {/* Temperature Conversions */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Temperature Conversions</h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>• <strong>Celsius to Fahrenheit:</strong> (°C × 9/5) + 32</li>
-                    <li>• <strong>Fahrenheit to Celsius:</strong> (°F - 32) × 5/9</li>
-                    <li>• <strong>Celsius to Kelvin:</strong> °C + 273.15</li>
-                    <li>• <strong>Kelvin to Celsius:</strong> K - 273.15</li>
-                  </ul>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Temperature</h3>
+                  <div className="space-y-2">
+                    <Link href="/tools/unit-converter/celsius/to/fahrenheit" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Celsius to Fahrenheit →
+                    </Link>
+                    <Link href="/tools/unit-converter/fahrenheit/to/celsius" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Fahrenheit to Celsius →
+                    </Link>
+                    <Link href="/tools/unit-converter/celsius/to/kelvin" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Celsius to Kelvin →
+                    </Link>
+                    <Link href="/tools/unit-converter/kelvin/to/celsius" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Kelvin to Celsius →
+                    </Link>
+                    <Link href="/tools/unit-converter/fahrenheit/to/kelvin" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Fahrenheit to Kelvin →
+                    </Link>
+                    <Link href="/tools/unit-converter/kelvin/to/fahrenheit" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Kelvin to Fahrenheit →
+                    </Link>
+                  </div>
                 </div>
 
+                {/* Volume Conversions */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Volume Conversions</h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>• <strong>Liter to Gallon:</strong> Multiply by 0.264172</li>
-                    <li>• <strong>ML to FL OZ:</strong> Multiply by 0.033814</li>
-                    <li>• <strong>Cup to ML:</strong> Multiply by 236.588</li>
-                    <li>• <strong>Gallon to Liter:</strong> Multiply by 3.78541</li>
-                  </ul>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Volume</h3>
+                  <div className="space-y-2">
+                    <Link href="/tools/unit-converter/liter/to/gallon" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Liter to Gallon →
+                    </Link>
+                    <Link href="/tools/unit-converter/gallon/to/liter" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Gallon to Liter →
+                    </Link>
+                    <Link href="/tools/unit-converter/ml/to/floz" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      ML to FL OZ →
+                    </Link>
+                    <Link href="/tools/unit-converter/cup/to/ml" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Cup to ML →
+                    </Link>
+                    <Link href="/tools/unit-converter/floz/to/ml" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      FL OZ to ML →
+                    </Link>
+                    <Link href="/tools/unit-converter/pint/to/liter" className="block text-blue-600 hover:text-blue-800 text-sm">
+                      Pint to Liter →
+                    </Link>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            {/* All Conversions */}
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">All Available Conversions</h2>
+              <p className="text-gray-600 mb-4">
+                Our unit converter supports hundreds of conversion combinations. Click on any conversion below to get started:
+              </p>
+              
+              <div className="text-center">
+                <Link 
+                  href="/tools/unit-converter/cm/to/meter"
+                  className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium mr-4 mb-2"
+                >
+                  Browse All Length Conversions
+                </Link>
+                <Link 
+                  href="/tools/unit-converter/kg/to/lb"
+                  className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium mr-4 mb-2"
+                >
+                  Browse All Weight Conversions
+                </Link>
+                <Link 
+                  href="/tools/unit-converter/celsius/to/fahrenheit"
+                  className="inline-block bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium mr-4 mb-2"
+                >
+                  Browse All Temperature Conversions
+                </Link>
+                <Link 
+                  href="/tools/unit-converter/liter/to/gallon"
+                  className="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium mb-2"
+                >
+                  Browse All Volume Conversions
+                </Link>
               </div>
             </div>
           </div>
