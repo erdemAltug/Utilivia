@@ -212,29 +212,114 @@ export default function BMICalculator() {
               )}
             </div>
 
-            {/* SEO Content */}
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">About BMI Calculator</h2>
-              
-              <p className="text-gray-600 mb-4">
-                Body Mass Index (BMI) is a simple calculation using a person's height and weight. 
-                The formula is BMI = kg/m² where kg is a person's weight in kilograms and m² is their height in metres squared.
-              </p>
-              
-              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">BMI Categories</h3>
-              <ul className="list-disc list-inside space-y-2 mb-4">
-                <li><strong>Underweight:</strong> BMI less than 18.5</li>
-                <li><strong>Normal weight:</strong> BMI 18.5-24.9</li>
-                <li><strong>Overweight:</strong> BMI 25-29.9</li>
-                <li><strong>Obese:</strong> BMI 30 or greater</li>
-              </ul>
-              
-              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Limitations of BMI</h3>
-              <p className="mb-4">
-                While BMI is a useful screening tool, it has limitations. It doesn't distinguish between muscle mass and fat mass, 
-                so athletes with high muscle mass may have a high BMI despite being healthy.
-              </p>
+                    {/* Popular BMI Combinations - SEO Link Building */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Popular BMI Calculations</h2>
+          <p className="text-gray-600 mb-6">
+            Quick access to common height and weight BMI calculations:
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Metric Combinations */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Metric (cm/kg)</h3>
+              <div className="space-y-2">
+                <Link href="/tools/bmi-calculator/170/70" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 170cm, 70kg →
+                </Link>
+                <Link href="/tools/bmi-calculator/175/80" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 175cm, 80kg →
+                </Link>
+                <Link href="/tools/bmi-calculator/165/60" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 165cm, 60kg →
+                </Link>
+                <Link href="/tools/bmi-calculator/180/85" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 180cm, 85kg →
+                </Link>
+                <Link href="/tools/bmi-calculator/160/55" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 160cm, 55kg →
+                </Link>
+                <Link href="/tools/bmi-calculator/185/90" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 185cm, 90kg →
+                </Link>
+              </div>
             </div>
+
+            {/* Imperial Combinations */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Imperial (ft'in"/lbs)</h3>
+              <div className="space-y-2">
+                <Link href="/tools/bmi-calculator/5-8/150" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 5'8", 150 lbs →
+                </Link>
+                <Link href="/tools/bmi-calculator/5-6/140" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 5'6", 140 lbs →
+                </Link>
+                <Link href="/tools/bmi-calculator/6-0/180" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 6'0", 180 lbs →
+                </Link>
+                <Link href="/tools/bmi-calculator/5-4/130" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 5'4", 130 lbs →
+                </Link>
+                <Link href="/tools/bmi-calculator/5-10/170" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 5'10", 170 lbs →
+                </Link>
+                <Link href="/tools/bmi-calculator/5-5/135" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  BMI for 5'5", 135 lbs →
+                </Link>
+              </div>
+            </div>
+
+            {/* BMI Ranges */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">BMI Categories</h3>
+              <div className="space-y-2">
+                <Link href="/tools/bmi-calculator/170/55" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  Underweight BMI Example →
+                </Link>
+                <Link href="/tools/bmi-calculator/170/65" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  Normal Weight BMI Example →
+                </Link>
+                <Link href="/tools/bmi-calculator/170/85" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  Overweight BMI Example →
+                </Link>
+                <Link href="/tools/bmi-calculator/170/100" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  Obese BMI Example →
+                </Link>
+                <Link href="/tools/bmi-calculator/5-8/120" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  Low BMI 5'8" 120lbs →
+                </Link>
+                <Link href="/tools/bmi-calculator/5-8/200" className="block text-blue-600 hover:text-blue-800 text-sm">
+                  High BMI 5'8" 200lbs →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SEO Content */}
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">About BMI Calculator</h2>
+          
+          <p className="text-gray-600 mb-4">
+            Body Mass Index (BMI) is a simple calculation using a person's height and weight. 
+            The formula is BMI = kg/m² where kg is a person's weight in kilograms and m² is their height in metres squared.
+          </p>
+          
+          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">BMI Categories</h3>
+          <ul className="list-disc list-inside space-y-2 mb-4">
+            <li><strong>Underweight:</strong> BMI less than 18.5</li>
+            <li><strong>Normal weight:</strong> BMI 18.5-24.9</li>
+            <li><strong>Overweight:</strong> BMI 25-29.9</li>
+            <li><strong>Obese:</strong> BMI 30 or greater</li>
+          </ul>
+          
+          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Limitations of BMI</h3>
+          <p className="mb-4">
+            While BMI is a useful screening tool, it has limitations. It doesn't distinguish between muscle mass and fat mass, 
+            so athletes with high muscle mass may have a high BMI despite being healthy.
+          </p>
+        </div>
           </div>
         </div>
       </div>

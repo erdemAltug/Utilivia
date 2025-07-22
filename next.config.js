@@ -4,9 +4,7 @@ const nextConfig = {
     domains: [],
     unoptimized: false,
   },
-  experimental: {
-    dynamicIO: true,
-  }
+
 }
 
 module.exports = nextConfig 
