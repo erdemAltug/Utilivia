@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://utilivia.com/sitemap.xml',
+    sitemap: 'https://www.utilivia.com/sitemap.xml',
   }
 } 
