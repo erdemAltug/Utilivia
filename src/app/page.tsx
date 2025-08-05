@@ -3,6 +3,35 @@ import React from 'react'
 import Link from 'next/link'
 import JsonLD from '@/components/JsonLD'
 import { generateWebApplicationSchema, generateFAQSchema } from '@/lib/seo'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Utilivia - Free Online Utility Tools',
+  description: 'Free online utility tools for everyday tasks. BMI calculator, unit converter, password generator, age calculator and more useful tools.',
+  keywords: ['utility tools', 'calculator', 'converter', 'BMI calculator', 'unit converter', 'password generator', 'free online tools'],
+  openGraph: {
+    title: 'Utilivia - Free Online Utility Tools',
+    description: 'Free online utility tools for everyday tasks. BMI calculator, unit converter, password generator and more.',
+    url: 'https://utilivia.com',
+    siteName: 'Utilivia',
+    images: [
+      {
+        url: 'https://utilivia.com/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Utilivia - Free Online Utility Tools',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Utilivia - Free Online Utility Tools',
+    description: 'Free online utility tools for everyday tasks. BMI calculator, unit converter, password generator and more.',
+    images: ['https://utilivia.com/og-image.jpg'],
+  },
+}
 
 const tools = [
   {

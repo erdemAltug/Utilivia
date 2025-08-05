@@ -1,4 +1,5 @@
-# Ads.txt for Utilivia.com
-# This file is used to identify authorized digital advertising sellers
-# Add your Google AdSense publisher ID when you get approved
-# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0 
+# Google AdSense
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+
+# Placeholder - Google AdSense onaylandıktan sonra gerçek publisher ID'yi ekle
+# Format: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0 

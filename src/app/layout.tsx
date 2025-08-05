@@ -21,13 +21,36 @@ export const metadata: Metadata = {
     'currency converter',
     'free tools',
     'online tools',
-    'web tools'
+    'web tools',
+    'cm to meter',
+    'kg to lb',
+    'celsius to fahrenheit',
+    'BMI calculator metric',
+    'age calculator',
+    'text case converter',
+    'lorem ipsum generator',
+    'base64 encoder decoder'
   ],
   authors: [{ name: 'Utilivia' }],
   creator: 'Utilivia',
+  publisher: 'Utilivia',
   metadataBase: new URL('https://utilivia.com'),
   alternates: {
     canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'your-google-verification-code', // Google Search Console'dan alacaksın
   },
   openGraph: {
     type: 'website',
@@ -42,17 +65,6 @@ export const metadata: Metadata = {
     title: 'Utilivia - Free Online Utility Tools',
     description: 'Free online utility tools for everyday tasks. BMI calculator, unit converter, password generator, currency converter and more useful tools.',
     creator: '@utilivia',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
   },
 }
 
