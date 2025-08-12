@@ -140,255 +140,158 @@ export default function AgeCalculator() {
       
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
       
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="container mx-auto px-4 py-8">
           <Breadcrumbs items={breadcrumbItems} />
           
-          <div className="max-w-6xl mx-auto">
-            {/* Hero Section */}
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full mb-6">
-                <span className="text-xl">📅</span>
-                <span className="font-medium">Age Calculator</span>
-              </div>
-              
-              <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent mb-6">
-                Calculate Your Age
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Age Calculator
               </h1>
-              
-              <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Discover your exact age, zodiac sign, and fascinating life statistics. 
-                Get ready to explore the incredible journey of your life!
+              <p className="text-xl text-gray-600">
+                Calculate your exact age and discover fun facts about your life
               </p>
             </div>
 
-            {/* Calculator Card */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 lg:p-12 mb-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Input Section */}
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+              {/* Birth Date Input */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Birth Date
+                </label>
+                <input
+                  type="date"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  max={new Date().toISOString().split('T')[0]}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Birth Time Input (Optional) */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Birth Time (optional)
+                </label>
+                <input
+                  type="time"
+                  value={birthTime}
+                  onChange={(e) => setBirthTime(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Adding birth time provides more precise calculations
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex space-x-4 mb-8">
+                <button
+                  onClick={handleCalculate}
+                  disabled={!birthDate}
+                  className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Calculate Age
+                </button>
+                <button
+                  onClick={handleReset}
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
+                >
+                  Reset
+                </button>
+              </div>
+
+              {/* Results */}
+              {result ? (
                 <div className="space-y-6">
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-800 mb-3">
-                      📅 Birth Date
-                    </label>
-                    <input
-                      type="date"
-                      value={birthDate}
-                      onChange={(e) => setBirthDate(e.target.value)}
-                      max={new Date().toISOString().split('T')[0]}
-                      className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
-                      placeholder="Select your birth date"
-                    />
+                  {/* Main Age Display */}
+                  <div className="text-center bg-blue-50 rounded-lg p-6">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">
+                      {result.years} years, {result.months} months, {result.days} days
+                    </div>
+                    <div className="text-lg text-gray-600">
+                      {result.zodiacSign}
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-lg font-semibold text-gray-800 mb-3">
-                      ⏰ Birth Time (Optional)
-                    </label>
-                    <input
-                      type="time"
-                      value={birthTime}
-                      onChange={(e) => setBirthTime(e.target.value)}
-                      className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
-                    />
-                    <p className="text-sm text-gray-500 mt-2 ml-2">
-                      💡 Adding birth time provides more precise calculations
+                  {/* Detailed Breakdown */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {result.totalDays.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-600">Total Days</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {result.totalWeeks.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-600">Total Weeks</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {result.totalHours.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-600">Total Hours</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {result.totalMinutes.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-600">Total Minutes</div>
+                    </div>
+                  </div>
+
+                  {/* Next Birthday */}
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">🎂 Next Birthday</h3>
+                    <p className="text-gray-600 mb-1">
+                      {formatDate(result.nextBirthday.date)}
+                    </p>
+                    <p className="text-xl font-bold text-blue-600">
+                      {result.nextBirthday.daysUntil} days to go!
                     </p>
                   </div>
 
-                  <div className="flex space-x-4 pt-4">
-                    <button
-                      onClick={handleCalculate}
-                      disabled={!birthDate}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-6 rounded-2xl hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-semibold text-lg"
-                    >
-                      🧮 Calculate Age
-                    </button>
-                    <button
-                      onClick={handleReset}
-                      className="px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-2xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-lg"
-                    >
-                      🔄 Reset
-                    </button>
+                  {/* Fun Facts */}
+                  <div className="bg-blue-50 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">🎉 Fun Facts</h3>
+                    <ul className="space-y-2">
+                      {result.fun_facts.map((fact, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="text-blue-600 mr-2">•</span>
+                          <span className="text-gray-700">{fact}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-
-                {/* Preview Section */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 flex items-center justify-center">
-                  {result ? (
-                    <div className="text-center">
-                      <div className="text-6xl mb-4">🎉</div>
-                      <div className="text-2xl font-bold text-gray-800 mb-2">
-                        {result.years} years, {result.months} months, {result.days} days
-                      </div>
-                      <div className="text-lg text-indigo-600 font-semibold">
-                        {result.zodiacSign}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center text-gray-500">
-                      <div className="text-8xl mb-6">📅</div>
-                      <p className="text-xl font-medium">Enter your birth date to see your age</p>
-                      <p className="text-gray-400 mt-2">Get ready for some amazing discoveries!</p>
-                    </div>
-                  )}
+              ) : (
+                <div className="text-center text-gray-500 py-12">
+                  <div className="text-6xl mb-4">📅</div>
+                  <p className="text-lg">Enter your birth date to calculate your age</p>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Results Section */}
-            {result && (
-              <div className="space-y-8">
-                {/* Main Age Display */}
-                <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-8 lg:p-12 text-center text-white relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;%3E%3Ccircle cx=&quot;30&quot; cy=&quot;30&quot; r=&quot;2&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
-                  
-                  <div className="relative">
-                    <div className="text-5xl lg:text-7xl font-bold mb-4">
-                      {result.years} years, {result.months} months, {result.days} days
-                    </div>
-                    <div className="text-2xl lg:text-3xl font-semibold text-blue-100 mb-2">
-                      {result.zodiacSign}
-                    </div>
-                    <div className="text-lg text-blue-200">
-                      You've been on this amazing journey for quite some time!
-                    </div>
-                  </div>
-                </div>
-
-                {/* Detailed Statistics */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div className="text-3xl mb-2">📊</div>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                      {result.totalDays.toLocaleString()}
-                    </div>
-                    <div className="text-gray-600 font-medium">Total Days</div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div className="text-3xl mb-2">📅</div>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                      {result.totalWeeks.toLocaleString()}
-                    </div>
-                    <div className="text-gray-600 font-medium">Total Weeks</div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div className="text-3xl mb-2">⏰</div>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      {result.totalHours.toLocaleString()}
-                    </div>
-                    <div className="text-gray-600 font-medium">Total Hours</div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    <div className="text-3xl mb-2">⏱️</div>
-                    <div className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                      {result.totalMinutes.toLocaleString()}
-                    </div>
-                    <div className="text-gray-600 font-medium">Total Minutes</div>
-                  </div>
-                </div>
-
-                {/* Next Birthday */}
-                <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl p-8 border border-pink-200">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-3xl text-white">
-                      🎂
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900">Next Birthday</h3>
-                      <p className="text-gray-600">Mark your calendar!</p>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-2xl p-6 shadow-lg">
-                      <div className="text-lg font-semibold text-gray-800 mb-2">Date</div>
-                      <div className="text-2xl font-bold text-pink-600">
-                        {formatDate(result.nextBirthday.date)}
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-2xl p-6 shadow-lg">
-                      <div className="text-lg font-semibold text-gray-800 mb-2">Countdown</div>
-                      <div className="text-2xl font-bold text-pink-600">
-                        {result.nextBirthday.daysUntil} days to go!
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Fun Facts */}
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-8 border border-yellow-200">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center text-3xl text-white">
-                      🎉
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900">Fun Facts</h3>
-                      <p className="text-gray-600">Amazing statistics about your life!</p>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {result.fun_facts.map((fact, index) => (
-                      <div key={index} className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300">
-                        <div className="flex items-start space-x-3">
-                          <span className="text-yellow-500 text-xl">✨</span>
-                          <span className="text-gray-700 leading-relaxed">{fact}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* SEO Content */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 lg:p-12 mt-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center">
-                About Age Calculator
-              </h2>
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">About Age Calculator</h2>
               
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                  <p className="text-gray-600 mb-6 leading-relaxed text-lg">
-                    Our age calculator helps you determine your exact age in years, months, and days from your birth date. 
-                    Whether you need to know your age for official documents, birthday planning, or simple curiosity, 
-                    this tool provides accurate calculations down to the day.
-                  </p>
-                  
-                  <p className="text-gray-600 leading-relaxed text-lg">
-                    Discover fascinating insights about your life journey, including your zodiac sign, 
-                    next birthday countdown, and incredible statistics that will make you appreciate 
-                    every moment of your existence.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">✨ Features</h3>
-                  <ul className="space-y-3">
-                    <li className="flex items-start space-x-3">
-                      <span className="text-blue-500 text-xl">⭐</span>
-                      <span className="text-gray-700"><strong>Zodiac Sign:</strong> Discover your astrological sign based on your birth date</span>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                      <span className="text-blue-500 text-xl">⭐</span>
-                      <span className="text-gray-700"><strong>Next Birthday:</strong> Find out exactly when your next birthday is</span>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                      <span className="text-blue-500 text-xl">⭐</span>
-                      <span className="text-gray-700"><strong>Fun Statistics:</strong> Learn interesting facts about your life duration</span>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                      <span className="text-blue-500 text-xl">⭐</span>
-                      <span className="text-gray-700"><strong>Multiple Time Units:</strong> See your age in days, weeks, hours, and minutes</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <p className="text-gray-600 mb-4">
+                Our age calculator helps you determine your exact age in years, months, and days from your birth date. 
+                Whether you need to know your age for official documents, birthday planning, or simple curiosity, 
+                this tool provides accurate calculations down to the day.
+              </p>
+              
+              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">Features</h3>
+              <ul className="list-disc list-inside space-y-2 mb-4">
+                <li><strong>Zodiac Sign:</strong> Discover your astrological sign based on your birth date</li>
+                <li><strong>Next Birthday:</strong> Find out exactly when your next birthday is</li>
+                <li><strong>Fun Statistics:</strong> Learn interesting facts about your life duration</li>
+                <li><strong>Multiple Time Units:</strong> See your age in days, weeks, hours, and minutes</li>
+              </ul>
             </div>
           </div>
         </div>
