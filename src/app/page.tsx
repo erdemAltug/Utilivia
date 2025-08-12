@@ -35,353 +35,398 @@ export const metadata: Metadata = {
 
 const tools = [
   {
-    id: 'bmi-calculator',
     name: 'BMI Calculator',
     description: 'Calculate your Body Mass Index with height and weight',
-    category: 'Health & Fitness',
-    difficulty: 4,
     icon: '⚖️',
-    searchQueries: ['bmi calculator', 'body mass index', 'weight calculator']
+    category: 'Health & Fitness',
+    difficulty: 1,
+    url: '/tools/bmi-calculator',
+    color: 'from-pink-500 to-rose-500',
+    bgColor: 'bg-gradient-to-br from-pink-50 to-rose-50',
+    borderColor: 'border-pink-200'
   },
   {
-    id: 'age-calculator',
     name: 'Age Calculator',
     description: 'Calculate age based on birth date with precision',
-    category: 'Date & Time',
-    difficulty: 3,
     icon: '📅',
-    searchQueries: ['age calculator', 'birth date calculator', 'age finder']
+    category: 'Date & Time',
+    difficulty: 1,
+    url: '/tools/age-calculator',
+    color: 'from-blue-500 to-indigo-500',
+    bgColor: 'bg-gradient-to-br from-blue-50 to-indigo-50',
+    borderColor: 'border-blue-200'
   },
   {
-    id: 'unit-converter',
     name: 'Unit Converter',
     description: 'Convert between cm↔inch, kg↔lb, L↔gallon and more',
-    category: 'Math & Conversion',
-    difficulty: 4,
     icon: '📏',
-    searchQueries: ['unit converter', 'metric conversion', 'length converter']
+    category: 'Math & Conversion',
+    difficulty: 2,
+    url: '/tools/unit-converter',
+    color: 'from-green-500 to-emerald-500',
+    bgColor: 'bg-gradient-to-br from-green-50 to-emerald-50',
+    borderColor: 'border-green-200'
   },
-  // {
-  //   id: 'timezone-converter',
-  //   name: 'Time Zone Converter',
-  //   description: 'Compare time zones like EST→GMT worldwide',
-  //   category: 'Date & Time',
-  //   difficulty: 4,
-  //   icon: '🌍',
-  //   searchQueries: ['timezone converter', 'time zone', 'world clock']
-  // },
-  // {
-  //   id: 'currency-converter',
-  //   name: 'Currency Converter',
-  //   description: 'Real-time currency exchange rates and conversion',
-  //   category: 'Finance',
-  //   difficulty: 5,
-  //   icon: '💱',
-  //   searchQueries: ['currency converter', 'exchange rate', 'money converter']
-  // },
   {
-    id: 'text-case-converter',
     name: 'Text Case Converter',
     description: 'Convert text to lowercase, UPPERCASE, camelCase formats',
-    category: 'Text Tools',
-    difficulty: 3,
     icon: '📝',
-    searchQueries: ['text case converter', 'uppercase lowercase', 'camelcase']
+    category: 'Text Tools',
+    difficulty: 1,
+    url: '/tools/text-case-converter',
+    color: 'from-purple-500 to-violet-500',
+    bgColor: 'bg-gradient-to-br from-purple-50 to-violet-50',
+    borderColor: 'border-purple-200'
   },
-  // {
-  //   id: 'json-formatter',
-  //   name: 'JSON Formatter & Validator',
-  //   description: 'Format and validate JSON data with error detection',
-  //   category: 'Developer Tools',
-  //   difficulty: 4,
-  //   icon: '🔧',
-  //   searchQueries: ['json formatter', 'json validator', 'json beautify']
-  // },
-  // {
-  //   id: 'ip-lookup',
-  //   name: 'IP Address Lookup',
-  //   description: 'Get location and device information from IP address',
-  //   category: 'Network Tools',
-  //   difficulty: 3,
-  //   icon: '🌐',
-  //   searchQueries: ['ip lookup', 'ip address', 'location finder']
-  // },
   {
-    id: 'lorem-generator',
     name: 'Lorem Ipsum Generator',
     description: 'Generate placeholder text for web design and development',
-    category: 'Content Creation',
-    difficulty: 3,
     icon: '📄',
-    searchQueries: ['lorem ipsum', 'placeholder text', 'dummy text']
+    category: 'Content Creation',
+    difficulty: 1,
+    url: '/tools/lorem-generator',
+    color: 'from-orange-500 to-amber-500',
+    bgColor: 'bg-gradient-to-br from-orange-50 to-amber-50',
+    borderColor: 'border-orange-200'
   },
-  // {
-  //   id: 'qr-generator',
-  //   name: 'QR Code Generator', 
-  //   description: 'Convert text or URL to QR code for marketing and sharing',
-  //   category: 'Marketing',
-  //   difficulty: 4,
-  //   icon: '📱',
-  //   searchQueries: ['qr code generator', 'qr code', 'barcode generator']
-  // },
   {
-    id: 'password-generator',
     name: 'Password Generator',
     description: 'Generate strong, secure passwords for all your accounts',
+    icon: '🔐',
     category: 'Security',
-    difficulty: 4,
-    icon: '🔒',
-    searchQueries: ['password generator', 'secure password', 'strong password']
+    difficulty: 1,
+    url: '/tools/password-generator',
+    color: 'from-red-500 to-pink-500',
+    bgColor: 'bg-gradient-to-br from-red-50 to-pink-50',
+    borderColor: 'border-red-200'
   },
   {
-    id: 'base64-encoder',
     name: 'Base64 Encode/Decode',
     description: 'Encode and decode text using Base64 encoding',
+    icon: '🔓',
     category: 'Developer Tools',
-    difficulty: 3,
-    icon: '🔐',
-    searchQueries: ['base64 encoder', 'base64 decoder', 'encoding']
+    difficulty: 2,
+    url: '/tools/base64-encoder',
+    color: 'from-teal-500 to-cyan-500',
+    bgColor: 'bg-gradient-to-br from-teal-50 to-cyan-50',
+    borderColor: 'border-teal-200'
   }
 ]
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center space-x-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <span
-          key={star}
-          className={`text-sm ${
-            star <= rating ? 'text-yellow-400' : 'text-gray-300'
-          }`}
-        >
-          ⭐
-        </span>
-      ))}
-    </div>
-  )
-}
+const features = [
+  {
+    icon: '⚡',
+    title: 'Lightning Fast',
+    description: 'Instant calculations and conversions with no waiting time'
+  },
+  {
+    icon: '🔒',
+    title: '100% Secure',
+    description: 'All calculations happen locally, your data never leaves your device'
+  },
+  {
+    icon: '📱',
+    title: 'Mobile Friendly',
+    description: 'Perfect experience on all devices - desktop, tablet, and mobile'
+  },
+  {
+    icon: '🎯',
+    title: 'SEO Optimized',
+    description: 'Thousands of dynamic URLs for maximum search engine visibility'
+  }
+]
 
-export default function HomePage() {
-  const faqData = [
-    {
-      question: "Are these utility tools completely free to use?",
-      answer: "Yes, all our utility tools are 100% free to use. No registration, no hidden fees, no limitations."
-    },
-    {
-      question: "Do you store or track my data when using the tools?",
-      answer: "No, we prioritize your privacy. All calculations are performed locally in your browser and we don't store any personal data."
-    },
-    {
-      question: "Can I use these tools on mobile devices?",
-      answer: "Absolutely! All our tools are mobile-responsive and work seamlessly on smartphones and tablets."
-    },
-    {
-      question: "How accurate are the calculations?",
-      answer: "Our tools use industry-standard formulas and algorithms to ensure maximum accuracy in all calculations."
-    }
-  ]
+const stats = [
+  { number: '1000+', label: 'Dynamic URLs' },
+  { number: '12+', label: 'Utility Tools' },
+  { number: '100%', label: 'Free Forever' },
+  { number: '24/7', label: 'Available' }
+]
 
+export default function Home() {
   return (
     <>
       <JsonLD data={generateWebApplicationSchema()} />
-      <JsonLD data={generateFAQSchema(faqData)} />
+      <JsonLD data={generateFAQSchema()} />
       
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <h1 className="text-3xl font-bold text-gray-900">🛠️ Utilivia</h1>
-              <span className="ml-3 bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded">
-                Free Tools
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <a href="#tools" className="text-gray-600 hover:text-gray-900">Tools</a>
-              <a href="#about" className="text-gray-600 hover:text-gray-900">About</a>
-              <a href="#contact" className="text-gray-600 hover:text-gray-900">Contact</a>
-            </nav>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            Free Online Utility Tools
-          </h2>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            Powerful, fast, and free tools for everyday tasks. Calculate, convert, generate, and optimize - all in one place.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#tools"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Explore Tools
-            </a>
-            <a
-              href="#about"
-              className="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-            >
-              Learn More
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Tools Grid */}
-      <section id="tools" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Choose Your Tool
-            </h3>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Professional-grade utilities designed for speed, accuracy, and ease of use.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {tools.map((tool) => (
-              <Link
-                key={tool.id}
-                href={`/tools/${tool.id}`}
-                className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group hover:-translate-y-1"
-              >
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-3xl">{tool.icon}</span>
-                    <StarRating rating={tool.difficulty} />
-                  </div>
-                  
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {tool.name}
-                  </h4>
-                  
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {tool.description}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded">
-                      {tool.category}
-                    </span>
-                    <span className="text-blue-600 font-medium text-sm group-hover:text-blue-700">
-                      Try Now →
-                    </span>
-                  </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        {/* Header */}
+        <header className="relative z-10 bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                  <span className="text-white text-xl font-bold">U</span>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+                    Utilivia
+                  </h1>
+                  <span className="text-xs bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-2 py-1 rounded-full">
+                    Free Tools
+                  </span>
+                </div>
               </div>
-              <h4 className="text-xl font-semibold mb-2">Lightning Fast</h4>
-              <p className="text-gray-600">Instant results with optimized algorithms and modern web technology.</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎯</span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2">Accurate Results</h4>
-              <p className="text-gray-600">Precision-engineered calculations and conversions you can trust.</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🔒</span>
-              </div>
-              <h4 className="text-xl font-semibold mb-2">Privacy First</h4>
-              <p className="text-gray-600">All calculations happen in your browser. Your data never leaves your device.</p>
+              
+              <nav className="hidden md:flex items-center space-x-8">
+                <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Tools
+                </Link>
+                <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  About
+                </Link>
+                <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Contact
+                </Link>
+              </nav>
             </div>
           </div>
-        </div>
-      </section>
+        </header>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xl text-gray-600">
-              Everything you need to know about our free utility tools
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {faqData.map((faq, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  {faq.question}
-                </h3>
-                <p className="text-gray-600">
-                  {faq.answer}
-                </p>
+        {/* Hero Section */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600"></div>
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+          
+          <div className="relative container mx-auto px-4 py-20 lg:py-32">
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-8">
+                <span className="text-white text-sm">🚀</span>
+                <span className="text-white text-sm font-medium">Free Online Utility Tools</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <h5 className="text-2xl font-bold mb-4">🛠️ Utilivia</h5>
-              <p className="text-gray-400 mb-4">
-                Your go-to destination for free, fast, and reliable online utility tools. 
-                Simplifying everyday tasks with professional-grade tools.
+              
+              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                Powerful Tools for
+                <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                  Everyday Tasks
+                </span>
+              </h1>
+              
+              <p className="text-xl lg:text-2xl text-blue-100 mb-10 leading-relaxed max-w-3xl mx-auto">
+                Calculate, convert, generate, and optimize - all in one place. 
+                Professional-grade utilities designed for speed, accuracy, and ease of use.
               </p>
-              <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">Twitter</a>
-                <a href="#" className="text-gray-400 hover:text-white">GitHub</a>
-                <a href="#" className="text-gray-400 hover:text-white">Contact</a>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  href="#tools"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                >
+                  Explore Tools
+                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+                <Link 
+                  href="#features"
+                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+                >
+                  Learn More
+                </Link>
               </div>
-            </div>
-            
-            <div>
-              <h6 className="font-semibold mb-4">Popular Tools</h6>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/tools/bmi-calculator" className="hover:text-white">BMI Calculator</Link></li>
-                <li><Link href="/tools/password-generator" className="hover:text-white">Password Generator</Link></li>
-                <li><Link href="/tools/unit-converter" className="hover:text-white">Unit Converter</Link></li>
-                <li><Link href="/tools/qr-generator" className="hover:text-white">QR Code Generator</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h6 className="font-semibold mb-4">Categories</h6>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white">Calculators</a></li>
-                <li><a href="#" className="hover:text-white">Converters</a></li>
-                <li><a href="#" className="hover:text-white">Generators</a></li>
-                <li><a href="#" className="hover:text-white">Developer Tools</a></li>
-              </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Utilivia. All rights reserved. Made with ❤️ for productivity.</p>
+          {/* Floating Elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-32 h-32 bg-purple-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-blue-400/20 rounded-full blur-xl animate-pulse delay-500"></div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center group">
+                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </section>
+
+        {/* Tools Section */}
+        <section id="tools" className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Choose Your Tool
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Professional-grade utilities designed for speed, accuracy, and ease of use. 
+                Each tool is optimized for both beginners and professionals.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {tools.map((tool, index) => (
+                <Link 
+                  key={tool.name}
+                  href={tool.url}
+                  className="group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100"
+                >
+                  <div className={`absolute inset-0 ${tool.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                  
+                  <div className="relative p-8">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className={`w-16 h-16 ${tool.bgColor} rounded-2xl flex items-center justify-center text-3xl shadow-lg`}>
+                        {tool.icon}
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                      {tool.name}
+                    </h3>
+                    
+                    <p className="text-gray-600 mb-4 leading-relaxed">
+                      {tool.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${tool.bgColor} ${tool.borderColor} border`}>
+                        {tool.category}
+                      </span>
+                      
+                      <div className="flex items-center space-x-1 text-gray-400">
+                        {[...Array(3)].map((_, i) => (
+                          <div 
+                            key={i} 
+                            className={`w-2 h-2 rounded-full ${i < tool.difficulty ? 'bg-blue-500' : 'bg-gray-300'}`}
+                          ></div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 flex items-center text-blue-600 font-semibold group-hover:text-blue-700 transition-colors">
+                      Try Now
+                      <svg className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  {/* Hover Effect */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${tool.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Why Choose Utilivia?
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                We've built the most comprehensive collection of online utility tools 
+                with a focus on speed, accuracy, and user experience.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <div key={index} className="text-center group">
+                  <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+          
+          <div className="relative container mx-auto px-4 text-center">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+              Ready to Get Started?
+            </h2>
+            <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+              Join thousands of users who trust Utilivia for their daily utility needs. 
+              Start using our tools today - completely free!
+            </p>
+            
+            <Link 
+              href="#tools"
+              className="inline-flex items-center justify-center px-10 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              Start Using Tools
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-16">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="col-span-1 md:col-span-2">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                    <span className="text-white text-xl font-bold">U</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">Utilivia</h3>
+                    <p className="text-gray-400">Free Online Utility Tools</p>
+                  </div>
+                </div>
+                <p className="text-gray-400 mb-6 max-w-md">
+                  Professional-grade utility tools designed for speed, accuracy, and ease of use. 
+                  Calculate, convert, generate, and optimize - all in one place.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-semibold mb-4">Tools</h4>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/tools/bmi-calculator" className="hover:text-white transition-colors">BMI Calculator</Link></li>
+                  <li><Link href="/tools/age-calculator" className="hover:text-white transition-colors">Age Calculator</Link></li>
+                  <li><Link href="/tools/unit-converter" className="hover:text-white transition-colors">Unit Converter</Link></li>
+                  <li><Link href="/tools/password-generator" className="hover:text-white transition-colors">Password Generator</Link></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-lg font-semibold mb-4">Support</h4>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/" className="hover:text-white transition-colors">About Us</Link></li>
+                  <li><Link href="/" className="hover:text-white transition-colors">Contact</Link></li>
+                  <li><Link href="/" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                  <li><Link href="/" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+              <p>&copy; 2024 Utilivia. All rights reserved. Made with ❤️ for the community.</p>
+            </div>
+          </div>
+        </footer>
+      </div>
     </>
   )
 } 
