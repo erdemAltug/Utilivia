@@ -35,7 +35,7 @@ function calculateBMI(height: number, weight: number, unit: 'metric' | 'imperial
   }
 
   const bmi = weightInKg / (heightInMeters * heightInMeters)
-  
+
   let category: string
   let categoryColor: string
   let healthTips: string[]
@@ -80,13 +80,13 @@ function calculateBMI(height: number, weight: number, unit: 'metric' | 'imperial
 export default function BMIClient({ params, parsedHeight, parsedWeight, unit, displayHeight, displayWeight }: Props) {
   const [customHeight, setCustomHeight] = useState('')
   const [customWeight, setCustomWeight] = useState('')
-  
+
   const bmiResult = calculateBMI(parsedHeight, parsedWeight, unit)
-  
+
   // Generate related BMI calculations
   const relatedCalculations = []
   const baseWeight = parsedWeight
-  
+
   // Similar heights with different weights
   for (let i = -2; i <= 2; i++) {
     if (i === 0) continue
@@ -104,9 +104,9 @@ export default function BMIClient({ params, parsedHeight, parsedWeight, unit, di
   const handleCustomCalculate = () => {
     const h = parseFloat(customHeight)
     const w = parseFloat(customWeight)
-    
+
     if (h > 0 && w > 0) {
-      const newUrl = unit === 'imperial' 
+      const newUrl = unit === 'imperial'
         ? `/tools/bmi-calculator/${Math.round(h)}/${Math.round(w)}`
         : `/tools/bmi-calculator/${Math.round(h)}/${Math.round(w)}`
       window.location.href = newUrl
@@ -146,7 +146,7 @@ export default function BMIClient({ params, parsedHeight, parsedWeight, unit, di
       {/* Custom Calculator */}
       <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Calculate Different BMI</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -187,7 +187,7 @@ export default function BMIClient({ params, parsedHeight, parsedWeight, unit, di
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
           Related BMI Calculations for {displayHeight}
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {relatedCalculations.map((calc, index) => {
             const relatedBMI = calculateBMI(parsedHeight, parseFloat(calc.weight), unit)
@@ -212,7 +212,7 @@ export default function BMIClient({ params, parsedHeight, parsedWeight, unit, di
             )
           })}
         </div>
-        
+
         <div className="text-center mt-6">
           <Link
             href="/tools/bmi-calculator"

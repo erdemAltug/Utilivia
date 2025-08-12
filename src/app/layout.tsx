@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code', // Google Search Console'dan alacaksın
+    google: 'your-google-verification-code', 
   },
   openGraph: {
     type: 'website',
