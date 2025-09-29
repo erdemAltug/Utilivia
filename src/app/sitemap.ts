@@ -1,141 +1,130 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
+import { generateAllSEOURLs } from '@/lib/seo-urls';
 
-const allUnits = [
-  // Length
-  { symbol: 'mm', category: 'length' },
-  { symbol: 'cm', category: 'length' },
-  { symbol: 'meter', category: 'length' },
-  { symbol: 'km', category: 'length' },
-  { symbol: 'inch', category: 'length' },
-  { symbol: 'ft', category: 'length' },
-  { symbol: 'yard', category: 'length' },
-  { symbol: 'mile', category: 'length' },
-  
-  // Weight  
-  { symbol: 'gram', category: 'weight' },
-  { symbol: 'kg', category: 'weight' },
-  { symbol: 'oz', category: 'weight' },
-  { symbol: 'lb', category: 'weight' },
-  { symbol: 'stone', category: 'weight' },
-  { symbol: 'ton', category: 'weight' },
-  
-  // Temperature
-  { symbol: 'celsius', category: 'temperature' },
-  { symbol: 'fahrenheit', category: 'temperature' },
-  { symbol: 'kelvin', category: 'temperature' },
-  
-  // Volume
-  { symbol: 'ml', category: 'volume' },
-  { symbol: 'liter', category: 'volume' },
-  { symbol: 'floz', category: 'volume' },
-  { symbol: 'cup', category: 'volume' },
-  { symbol: 'pint', category: 'volume' },
-  { symbol: 'quart', category: 'volume' },
-  { symbol: 'gallon', category: 'volume' }
-]
+// Statik sayfalar
+const STATIC_PAGES = [
+  '/',
+  '/about',
+  '/contact',
+  '/privacy',
+  '/terms'
+];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://utilivia.com'
-  
-  const tools = [
-    'bmi-calculator',
-    'age-calculator',
-    'unit-converter',
-    'text-case-converter',
-    'lorem-generator',
-    'password-generator',
-    'base64-encoder'
-  ]
+// Araç sayfaları
+const TOOL_PAGES = [
+  '/tools/bmi-calculator',
+  '/tools/age-calculator',
+  '/tools/unit-converter',
+  '/tools/text-case-converter',
+  '/tools/password-generator',
+  '/tools/base64-encoder',
+  '/tools/lorem-generator',
+  '/tools/currency-converter',
+  '/tools/timezone-converter',
+  '/tools/json-formatter',
+  '/tools/ip-lookup',
+  '/tools/qr-generator'
+];
 
-  const toolUrls = tools.map(tool => ({
-    url: `${baseUrl}/tools/${tool}`,
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://utilivia.com';
+  
+  // Statik sayfalar için sitemap entry'leri
+  const staticEntries: MetadataRoute.Sitemap = STATIC_PAGES.map(page => ({
+    url: `${baseUrl}${page}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8
-  }))
-
-  // Generate conversion URLs
-  const conversionUrls: MetadataRoute.Sitemap = []
+    changeFrequency: page === '/' ? 'daily' : 'monthly',
+    priority: page === '/' ? 1.0 : 0.8
+  }));
   
-  for (const fromUnit of allUnits) {
-    for (const toUnit of allUnits) {
-      if (fromUnit.category === toUnit.category && fromUnit.symbol !== toUnit.symbol) {
-        conversionUrls.push({
-          url: `${baseUrl}/tools/unit-converter/${fromUnit.symbol}/to/${toUnit.symbol}`,
-          lastModified: new Date(),
-          changeFrequency: 'monthly' as const,
-          priority: 0.7
-        })
-      }
-    }
-  }
-
-  // Generate BMI Calculator URLs - EXTENDED RANGE
-  const bmiUrls: MetadataRoute.Sitemap = []
+  // Araç sayfaları için sitemap entry'leri
+  const toolEntries: MetadataRoute.Sitemap = TOOL_PAGES.map(page => ({
+    url: `${baseUrl}${page}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.9
+  }));
   
-  // Metric combinations (cm/kg) - EXTENDED
-  const metricHeights = [140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210]
-  const metricWeights = [40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140]
+  // Dinamik SEO URL'leri için entry'ler
+  const dynamicEntries: MetadataRoute.Sitemap = [];
   
-  for (const height of metricHeights) {
-    for (const weight of metricWeights) {
-      bmiUrls.push({
+  // SEO URL yapılandırmasından dinamik URL'leri al
+  const seoURLs = generateAllSEOURLs(20);
+  
+  // Her araç için popüler URL'leri ekle
+  Object.entries(seoURLs).forEach(([toolId, urls]) => {
+    urls.forEach(url => {
+      dynamicEntries.push({
+        url: `${baseUrl}${url}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7
+      });
+    });
+  });
+  
+  // BMI hesaplayıcı için özel URL'ler
+  for (let height = 150; height <= 200; height += 5) {
+    for (let weight = 50; weight <= 120; weight += 5) {
+      dynamicEntries.push({
         url: `${baseUrl}/tools/bmi-calculator/${height}/${weight}`,
         lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.8
-      })
-    }
-  }
-
-  // Imperial combinations (feet-inches/lbs) - EXTENDED
-  const imperialHeights = [
-    '4-8', '4-9', '4-10', '4-11', '5-0', '5-1', '5-2', '5-3', '5-4', '5-5', 
-    '5-6', '5-7', '5-8', '5-9', '5-10', '5-11', '6-0', '6-1', '6-2', '6-3', 
-    '6-4', '6-5', '6-6', '6-7', '6-8'
-  ]
-  const imperialWeights = [80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300]
-  
-  for (const height of imperialHeights) {
-    for (const weight of imperialWeights) {
-      bmiUrls.push({
-        url: `${baseUrl}/tools/bmi-calculator/${height}/${weight}`,
+        changeFrequency: 'monthly',
+        priority: 0.6
+      });
+      
+      // Metrik format
+      dynamicEntries.push({
+        url: `${baseUrl}/tools/bmi-calculator/${height}-cm-${weight}-kg`,
         lastModified: new Date(),
-        changeFrequency: 'monthly' as const,
-        priority: 0.8
-      })
+        changeFrequency: 'monthly',
+        priority: 0.6
+      });
     }
   }
-
-  // Generate Age Calculator URLs - POPULAR BIRTH YEARS
-  const ageUrls: MetadataRoute.Sitemap = []
-  const popularYears = [1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020]
-  const popularMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-  const popularDays = [1, 15, 30]
   
-  for (const year of popularYears) {
-    for (const month of popularMonths) {
-      for (const day of popularDays) {
-        ageUrls.push({
+  // Yaş hesaplayıcı için özel URL'ler
+  const currentYear = new Date().getFullYear();
+  for (let year = currentYear - 100; year <= currentYear; year += 2) {
+    for (let month = 1; month <= 12; month += 2) {
+      for (let day = 1; day <= 28; day += 7) {
+        dynamicEntries.push({
           url: `${baseUrl}/tools/age-calculator/${year}/${month}/${day}`,
           lastModified: new Date(),
-          changeFrequency: 'monthly' as const,
-          priority: 0.7
-        })
+          changeFrequency: 'monthly',
+          priority: 0.6
+        });
+        
+        // Tarih formatı
+        dynamicEntries.push({
+          url: `${baseUrl}/tools/age-calculator/${year}-${month}-${day}`,
+          lastModified: new Date(),
+          changeFrequency: 'monthly',
+          priority: 0.6
+        });
       }
     }
   }
-
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    ...toolUrls,
-    ...conversionUrls,
-    ...bmiUrls,
-    ...ageUrls
-  ]
-} 
+  
+  // Birim çevirici için özel URL'ler
+  const units = [
+    { from: 'meter', to: 'foot' },
+    { from: 'kilogram', to: 'pound' },
+    { from: 'celsius', to: 'fahrenheit' },
+    { from: 'centimeter', to: 'inch' }
+  ];
+  
+  for (const unit of units) {
+    for (let value = 1; value <= 1000; value *= 2) {
+      dynamicEntries.push({
+        url: `${baseUrl}/tools/unit-converter/${unit.from}/to/${unit.to}/${value}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.6
+      });
+    }
+  }
+  
+  // Tüm entry'leri birleştir
+  return [...staticEntries, ...toolEntries, ...dynamicEntries];
+}
