@@ -178,6 +178,47 @@ export const SEO_TOOL_CONFIGS: ToolConfig[] = [
   }
 ];
 
+
+// Blog yapılandırması
+export const BLOG_CONFIGS = [
+  {
+    id: 'ultimate-guide-online-calculators',
+    title: 'The Ultimate Guide to Online Calculators',
+    category: 'Guides',
+    url: '/blog/ultimate-guide-online-calculators'
+  },
+  {
+    id: 'currency-conversion-best-practices',
+    title: 'Currency Conversion Best Practices for Travelers',
+    category: 'Finance',
+    url: '/blog/currency-conversion-best-practices'
+  },
+  {
+    id: 'understanding-bmi-health',
+    title: 'Understanding BMI and Its Impact on Your Health',
+    category: 'Health',
+    url: '/blog/understanding-bmi-health'
+  },
+  {
+    id: 'password-security-best-practices',
+    title: 'Password Security Best Practices in 2024',
+    category: 'Security',
+    url: '/blog/password-security-best-practices'
+  },
+  {
+    id: 'time-zone-management-remote-work',
+    title: 'Mastering Time Zone Management for Remote Teams',
+    category: 'Productivity',
+    url: '/blog/time-zone-management-remote-work'
+  },
+  {
+    id: 'json-formatting-developers',
+    title: 'JSON Formatting Essentials for Developers',
+    category: 'Development',
+    url: '/blog/json-formatting-developers'
+  }
+];
+
 // Slug oluşturma fonksiyonu
 export function createSlug(text: string): string {
   return text

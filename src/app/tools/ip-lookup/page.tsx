@@ -141,6 +141,30 @@ export default function IPLookup() {
         'Find geographic location, ISP, and network information for any IP address. Free IP lookup tool with detailed location data.'
       )} />
       
+      {/* Additional SEO structured data for IP lookup */}
+      <JsonLD data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to lookup an IP address?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Enter the IP address you want to lookup in the input field and click the Lookup IP button. Our tool will show detailed information including geographic location, ISP, and network details."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What information can I get from an IP address?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our IP lookup tool provides city, region, country, postal code, coordinates, timezone, ISP, organization, and ASN information for any valid IP address."
+            }
+          }
+        ]
+      }} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

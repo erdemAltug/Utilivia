@@ -101,6 +101,30 @@ export default function CurrencyConverter() {
         'Convert currencies instantly with real-time exchange rates. Support for 15+ global currencies including USD, EUR, GBP, JPY, CAD, AUD and more.'
       )} />
       
+      {/* Additional SEO structured data for popular currency pairs */}
+      <JsonLD data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to convert USD to EUR?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Enter the amount in USD, select USD as the source currency and EUR as the target currency, then click convert. Our tool provides real-time exchange rates for accurate conversion."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What currencies are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We support 15+ major global currencies including USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, SEK, NZD, TRY, RUB, INR, BRL, and KRW."
+            }
+          }
+        ]
+      }} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

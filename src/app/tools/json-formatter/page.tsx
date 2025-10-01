@@ -115,6 +115,30 @@ export default function JSONFormatter() {
         'Format, validate, and minify JSON data instantly. Free online JSON formatter with syntax highlighting and error detection.'
       )} />
       
+      {/* Additional SEO structured data for JSON operations */}
+      <JsonLD data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to format JSON data?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Paste your JSON data into the input field and click the Format JSON button. Our tool will automatically indent and structure your JSON for better readability."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How to validate JSON syntax?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Paste your JSON data and click the Validate JSON button. Our tool will check for syntax errors and highlight any issues with detailed error messages."
+            }
+          }
+        ]
+      }} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

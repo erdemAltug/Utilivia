@@ -136,6 +136,30 @@ export default function TimezoneConverter() {
         'Compare time zones worldwide. Convert time between different cities and countries instantly. Perfect for international meetings and travel planning.'
       )} />
       
+      {/* Additional SEO structured data for timezone conversion */}
+      <JsonLD data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to convert time between New York and London?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Select America/New_York as the source timezone and Europe/London as the target timezone. Enter the date and time you want to convert, then click convert. Our tool shows the equivalent time in both locations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What time zones are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We support 15+ major time zones including UTC, America/New_York, America/Chicago, America/Denver, America/Los_Angeles, Europe/London, Europe/Paris, Europe/Berlin, Europe/Moscow, Asia/Dubai, Asia/Kolkata, Asia/Shanghai, Asia/Tokyo, Australia/Sydney, and Pacific/Auckland."
+            }
+          }
+        ]
+      }} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

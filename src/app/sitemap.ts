@@ -7,7 +7,8 @@ const STATIC_PAGES = [
   '/about',
   '/contact',
   '/privacy',
-  '/terms'
+  '/terms',
+  '/blog'
 ];
 
 // Araç sayfaları
@@ -125,6 +126,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
   
+  // Blog sayfaları
+  const blogEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8
+    },
+    {
+      url: `${baseUrl}/blog/ultimate-guide-online-calculators`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
+      url: `${baseUrl}/blog/currency-conversion-best-practices`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
+      url: `${baseUrl}/blog/understanding-bmi-health`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
+      url: `${baseUrl}/blog/password-security-best-practices`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
+      url: `${baseUrl}/blog/time-zone-management-remote-work`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
+      url: `${baseUrl}/blog/json-formatting-developers`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    }
+  ];
+  
   // Tüm entry'leri birleştir
-  return [...staticEntries, ...toolEntries, ...dynamicEntries];
+  return [...staticEntries, ...toolEntries, ...dynamicEntries, ...blogEntries];
 }

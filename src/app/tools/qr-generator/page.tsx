@@ -78,6 +78,30 @@ export default function QRGenerator() {
         'Generate custom QR codes for URLs, text, contacts, and more. Free online QR code generator with customization options.'
       )} />
       
+      {/* Additional SEO structured data for QR code generation */}
+      <JsonLD data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to create a QR code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Enter the content (URL, text, etc.) in the input field, customize the size and colors if desired, then click Generate QR Code. You can download or copy the generated QR code."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What types of QR codes can I generate?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our tool supports generating QR codes for URLs, plain text, contact information (vCard), and WiFi network credentials. The generated codes can be downloaded in PNG or SVG formats."
+            }
+          }
+        ]
+      }} />
+      
       <JsonLD data={generateBreadcrumbSchema(breadcrumbItems)} />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

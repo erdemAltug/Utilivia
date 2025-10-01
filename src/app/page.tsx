@@ -225,6 +225,18 @@ export default function HomePage() {
             <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
             <span className="text-sm font-medium">New tools added weekly</span>
           </div>
+          
+          <div>
+            <h6 className="font-semibold text-lg mb-6">Resources</h6>
+            <ul className="space-y-3">
+              <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+              <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+              <li><a href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+              <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="/sitemap.xml" className="text-gray-400 hover:text-white transition-colors">Sitemap</a></li>
+            </ul>
+          </div>
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Free Online <span className="text-yellow-300">Utility Tools</span>
           </h2>
@@ -450,6 +462,8 @@ export default function HomePage() {
               <ul className="space-y-3">
                 <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
                 <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                <li><a href="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                <li><a href="/resources" className="text-gray-400 hover:text-white transition-colors">Resource Hub</a></li>
                 <li><a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
                 <li><a href="/sitemap.xml" className="text-gray-400 hover:text-white transition-colors">Sitemap</a></li>
